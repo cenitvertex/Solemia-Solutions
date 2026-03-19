@@ -16,6 +16,19 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
 
+## Artifacts
+
+### `artifacts/solemia-web` (`@workspace/solemia-web`)
+
+Solemia marketing website — a static React + Vite site for the Solemia AI-solutions startup.
+
+- Sections: Navbar, Hero, Who We Serve, Solutions, Why Solemia, CTA, Footer
+- Brand colors: dark charcoal (#2d2d2d), coral-red (#e8455e), deep purple (#7b2d6a)
+- Logo: `/public/solemia-logo.jpg`
+- AI-generated images: `/public/images/hero-bg.png`, `/public/images/ai-abstract.png`
+- No backend dependency — pure static marketing site
+- Packages: framer-motion (animations), clsx, tailwind-merge
+
 ## Structure
 
 ```text

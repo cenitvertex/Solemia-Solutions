@@ -1,0 +1,16 @@
+packages:
+  "framer-motion": "For high-quality scroll animations, page transitions, and micro-interactions"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility function to efficiently merge Tailwind CSS classes"
+
+images:
+  - path: "artifacts/solemia-web/public/images/hero-bg.png"
+    description: "Abstract modern gradient mesh background in deep purple and dark charcoal with subtle glowing coral-red accents, clean corporate style, high resolution, soft lighting"
+    aspect_ratio: "16:9"
+  - path: "artifacts/solemia-web/public/images/ai-abstract.png"
+    description: "Minimalist abstract 3D render of an artificial intelligence glowing neural network floating over a clean corporate dark background, coral red and deep purple lighting, high end corporate software style"
+    aspect_ratio: "1:1"
+
+notes:
+  - This is a static marketing website per requirements, no backend API is integrated.
+  - Using the provided solemia-logo.jpg from the public folder.
