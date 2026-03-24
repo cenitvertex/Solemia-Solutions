@@ -4,20 +4,20 @@ import { Layers, Maximize, BrainCircuit } from "lucide-react";
 export function WhySolemia() {
   const features = [
     {
-      title: "Standardized",
-      description: "No endless custom development. We provide ready-to-use solutions configured for immediate impact.",
+      title: "Estandarizado",
+      description: "Sin desarrollos a medida interminables. Ofrecemos soluciones listas para usar, configuradas para generar impacto de inmediato.",
       icon: <Layers className="w-10 h-10 text-white" />,
       bg: "bg-solemia-charcoal"
     },
     {
-      title: "Scalable",
-      description: "Systems designed to grow with you. Handle 10 customers or 10,000 without breaking a sweat.",
+      title: "Escalable",
+      description: "Sistemas diseñados para crecer contigo. Atiende 10 clientes o 10.000 sin que nada se rompa.",
       icon: <Maximize className="w-10 h-10 text-white" />,
       bg: "bg-solemia-purple"
     },
     {
-      title: "Intelligent",
-      description: "Built with AI at the core, not as an afterthought. Our systems learn, adapt, and improve over time.",
+      title: "Inteligente",
+      description: "Construido con IA en el núcleo, no como un añadido. Nuestros sistemas aprenden, se adaptan y mejoran con el tiempo.",
       icon: <BrainCircuit className="w-10 h-10 text-white" />,
       bg: "bg-solemia-coral"
     }
@@ -27,9 +27,9 @@ export function WhySolemia() {
     <section id="why-solemia" className="py-24 bg-card">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-6">Why choose Solemia?</h2>
+          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-6">¿Por qué elegir Solemia?</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            We bridge the gap between enterprise-grade artificial intelligence and the practical needs of smaller businesses.
+            Acercamos la inteligencia artificial de nivel empresarial a las necesidades concretas de los negocios más pequeños.
           </p>
         </div>
 

@@ -16,9 +16,9 @@ export function Navbar() {
   }, []);
 
   const navLinks = [
-    { label: "Who We Serve", href: "#who-we-serve" },
-    { label: "Solutions", href: "#solutions" },
-    { label: "Why Solemia", href: "#why-solemia" },
+    { label: "A quién servimos", href: "#who-we-serve" },
+    { label: "Soluciones", href: "#solutions" },
+    { label: "Por qué Solemia", href: "#why-solemia" },
   ];
 
   return (
@@ -33,7 +33,7 @@ export function Navbar() {
             <Link href="/" className="flex items-center gap-2 cursor-pointer">
               <img
                 src={`${import.meta.env.BASE_URL}solemia-logo.jpg`}
-                alt="Solemia Logo"
+                alt="Logo de Solemia"
                 className="h-8 md:h-10 object-contain rounded-sm"
               />
             </Link>
@@ -54,7 +54,7 @@ export function Navbar() {
               href="#contact"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-solemia-charcoal text-white hover:bg-solemia-charcoal/90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
             >
-              Get Started
+              Comenzar
               <ArrowRight className="w-4 h-4" />
             </a>
           </div>
@@ -100,7 +100,7 @@ export function Navbar() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="mt-4 flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl text-base font-semibold bg-gradient-brand text-white shadow-md"
               >
-                Get Started
+                Comenzar
                 <ArrowRight className="w-4 h-4" />
               </a>
             </div>

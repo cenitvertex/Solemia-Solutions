@@ -10,12 +10,12 @@ export function Footer() {
             <Link href="/" className="inline-block mb-6">
               <img
                 src={`${import.meta.env.BASE_URL}solemia-logo.jpg`}
-                alt="Solemia Logo"
+                alt="Logo de Solemia"
                 className="h-10 object-contain rounded-sm"
               />
             </Link>
             <p className="text-muted-foreground text-sm mb-6">
-              Empowering micro, small, and medium-sized enterprises with standardized, scalable AI solutions.
+              Potenciamos micro, pequeñas y medianas empresas con soluciones de IA estandarizadas y escalables.
             </p>
             <div className="flex items-center gap-4">
               <a href="#" className="text-muted-foreground hover:text-solemia-coral transition-colors">
@@ -31,41 +31,41 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold text-foreground mb-4">Solutions</h4>
+            <h4 className="font-bold text-foreground mb-4">Soluciones</h4>
             <ul className="space-y-3">
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Process Automation</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">AI Analytics</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Smart Integrations</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Customer Intelligence</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Automatización de procesos</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Analítica con IA</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Integraciones inteligentes</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Inteligencia del cliente</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold text-foreground mb-4">Company</h4>
+            <h4 className="font-bold text-foreground mb-4">Empresa</h4>
             <ul className="space-y-3">
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">About Us</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Careers</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Quiénes somos</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Trabaja con nosotros</a></li>
               <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Blog</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Contact</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Contacto</a></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-bold text-foreground mb-4">Legal</h4>
             <ul className="space-y-3">
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Cookie Policy</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Política de privacidad</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Términos de servicio</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-solemia-coral transition-colors">Política de cookies</a></li>
             </ul>
           </div>
         </div>
 
         <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Solemia. All rights reserved.
+            &copy; {new Date().getFullYear()} Solemia. Todos los derechos reservados.
           </p>
           <div className="text-sm text-muted-foreground flex gap-2">
-            Built with AI intelligence.
+            Construido con inteligencia artificial.
           </div>
         </div>
       </div>

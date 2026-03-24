@@ -4,33 +4,33 @@ import { Cpu, LineChart, Link as LinkIcon, Compass, Users, Activity } from "luci
 export function Solutions() {
   const solutions = [
     {
-      title: "Process Automation",
-      description: "Eliminate manual data entry and workflow bottlenecks with intelligent agents.",
+      title: "Automatización de procesos",
+      description: "Elimina la captura manual de datos y los cuellos de botella operativos con agentes inteligentes.",
       icon: <Cpu className="w-6 h-6" />
     },
     {
-      title: "AI Analytics",
-      description: "Turn raw data into actionable insights instantly without hiring a data team.",
+      title: "Analítica con IA",
+      description: "Convierte datos crudos en insights accionables al instante, sin necesidad de un equipo de datos.",
       icon: <LineChart className="w-6 h-6" />
     },
     {
-      title: "Smart Integrations",
-      description: "Connect your disparate tools into a unified, communicative ecosystem.",
+      title: "Integraciones inteligentes",
+      description: "Conecta todas tus herramientas en un ecosistema unificado y comunicado entre sí.",
       icon: <LinkIcon className="w-6 h-6" />
     },
     {
-      title: "Decision Support",
-      description: "Predictive modeling that helps leaders make confident strategic choices.",
+      title: "Apoyo a la toma de decisiones",
+      description: "Modelos predictivos que ayudan a los líderes a tomar decisiones estratégicas con confianza.",
       icon: <Compass className="w-6 h-6" />
     },
     {
-      title: "Customer Intelligence",
-      description: "Understand behavior patterns to personalize marketing and boost retention.",
+      title: "Inteligencia del cliente",
+      description: "Comprende los patrones de comportamiento para personalizar el marketing y mejorar la retención.",
       icon: <Users className="w-6 h-6" />
     },
     {
-      title: "Operational Efficiency",
-      description: "Optimize resource allocation and reduce operational waste using AI.",
+      title: "Eficiencia operativa",
+      description: "Optimiza la asignación de recursos y reduce el desperdicio operativo usando inteligencia artificial.",
       icon: <Activity className="w-6 h-6" />
     }
   ];
@@ -43,11 +43,11 @@ export function Solutions() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
           <div className="max-w-2xl">
-            <h2 className="text-sm font-bold tracking-widest text-solemia-coral uppercase mb-3">Our Solutions</h2>
-            <h3 className="text-3xl md:text-5xl font-bold text-foreground">Standardized systems for complex problems</h3>
+            <h2 className="text-sm font-bold tracking-widest text-solemia-coral uppercase mb-3">Nuestras soluciones</h2>
+            <h3 className="text-3xl md:text-5xl font-bold text-foreground">Sistemas estandarizados para problemas complejos</h3>
           </div>
           <p className="text-lg text-muted-foreground max-w-md">
-            Out-of-the-box AI capabilities engineered specifically for the realities of modern SMBs.
+            Capacidades de IA listas para usar, diseñadas específicamente para la realidad de las pequeñas y medianas empresas de hoy.
           </p>
         </div>
 

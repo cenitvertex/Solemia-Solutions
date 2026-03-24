@@ -34,16 +34,16 @@ export function Hero() {
             >
               <Sparkles className="w-4 h-4 text-solemia-coral" />
               <span className="text-sm font-semibold text-foreground">
-                Next-Gen Standardized Solutions
+                Soluciones estandarizadas de nueva generación
               </span>
             </motion.div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] mb-6 text-foreground">
-              Powering smarter businesses with <span className="text-gradient">AI</span>
+              Potenciando negocios más inteligentes con <span className="text-gradient">IA</span>
             </h1>
             
             <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto lg:mx-0 font-medium">
-              We build AI-powered standardized solutions and systems designed specifically to scale micro, small, and medium-sized companies.
+              Construimos soluciones y sistemas estandarizados con inteligencia artificial, diseñados específicamente para escalar micro, pequeñas y medianas empresas.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
@@ -51,14 +51,14 @@ export function Hero() {
                 href="#contact"
                 className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-bold bg-gradient-brand text-white shadow-lg shadow-solemia-coral/25 hover:shadow-xl hover:shadow-solemia-coral/40 hover:-translate-y-1 transition-all duration-300"
               >
-                Transform Your Business
+                Transforma tu negocio
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
               <a
                 href="#solutions"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-bold bg-card border border-border text-foreground hover:bg-muted hover:border-solemia-purple/30 transition-all duration-300"
               >
-                Explore Solutions
+                Ver soluciones
                 <ChevronRight className="w-5 h-5" />
               </a>
             </div>
@@ -73,7 +73,7 @@ export function Hero() {
             <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-solemia-purple/20 border border-white/10">
               <img
                 src={`${import.meta.env.BASE_URL}images/ai-abstract.png`}
-                alt="AI Integration"
+                alt="Integración con IA"
                 className="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-solemia-charcoal/40 to-transparent pointer-events-none"></div>
@@ -90,7 +90,7 @@ export function Hero() {
                   <TrendingUpIcon className="w-6 h-6 text-solemia-coral" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground font-medium">Efficiency Increase</p>
+                  <p className="text-sm text-muted-foreground font-medium">Aumento de eficiencia</p>
                   <p className="text-2xl font-bold text-foreground">+300%</p>
                 </div>
               </div>

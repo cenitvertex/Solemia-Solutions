@@ -30,10 +30,10 @@ export function CTA() {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            Ready to transform your business?
+            ¿Listo para transformar tu negocio?
           </h2>
           <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
-            Join forward-thinking companies using Solemia's AI solutions to drive efficiency, growth, and clarity.
+            Únete a las empresas que ya usan las soluciones de IA de Solemia para impulsar su eficiencia, crecimiento y claridad operativa.
           </p>
 
           <form onSubmit={handleSubmit} className="max-w-md mx-auto relative">
@@ -43,7 +43,7 @@ export function CTA() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your work email"
+                placeholder="Ingresa tu correo de trabajo"
                 className="flex-grow px-6 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-solemia-coral backdrop-blur-sm transition-all"
               />
               <button
@@ -51,9 +51,9 @@ export function CTA() {
                 className="px-8 py-4 rounded-xl bg-solemia-coral text-white font-bold hover:bg-solemia-coral/90 transition-all flex items-center justify-center gap-2 shadow-lg shadow-solemia-coral/30 hover:shadow-xl"
               >
                 {submitted ? (
-                  <>Sent <Send className="w-5 h-5" /></>
+                  <>Enviado <Send className="w-5 h-5" /></>
                 ) : (
-                  <>Get Started <ArrowRight className="w-5 h-5" /></>
+                  <>Comenzar <ArrowRight className="w-5 h-5" /></>
                 )}
               </button>
             </div>
@@ -63,7 +63,7 @@ export function CTA() {
                 animate={{ opacity: 1, y: 0 }}
                 className="absolute -bottom-8 left-0 right-0 text-sm text-green-400 font-medium"
               >
-                Thanks! We'll be in touch shortly.
+                ¡Gracias! Nos pondremos en contacto contigo pronto.
               </motion.p>
             )}
           </form>

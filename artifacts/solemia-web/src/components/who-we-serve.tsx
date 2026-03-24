@@ -4,26 +4,26 @@ import { Store, Building, Building2, Lightbulb } from "lucide-react";
 export function WhoWeServe() {
   const targets = [
     {
-      title: "Micro Businesses",
-      description: "Automate repetitive tasks so you can focus on your craft, not administration.",
+      title: "Microempresas",
+      description: "Automatiza las tareas repetitivas para que puedas enfocarte en tu negocio, no en la administración.",
       icon: <Store className="w-8 h-8 text-solemia-coral" />,
       color: "from-solemia-coral/20 to-transparent"
     },
     {
-      title: "Small Companies",
-      description: "Standardized systems that establish process reliability and team alignment.",
+      title: "Pequeñas empresas",
+      description: "Sistemas estandarizados que establecen procesos confiables y mantienen a tu equipo alineado.",
       icon: <Building className="w-8 h-8 text-solemia-purple" />,
       color: "from-solemia-purple/20 to-transparent"
     },
     {
-      title: "Medium Enterprises",
-      description: "Scale operations seamlessly with AI insights and deep integrations.",
+      title: "Medianas empresas",
+      description: "Escala tus operaciones sin fricciones con insights de IA e integraciones profundas.",
       icon: <Building2 className="w-8 h-8 text-solemia-charcoal dark:text-gray-300" />,
       color: "from-gray-500/20 to-transparent"
     },
     {
-      title: "Entrepreneurs",
-      description: "Launch faster with intelligent tools designed to test and validate growth.",
+      title: "Emprendedores",
+      description: "Lanza más rápido con herramientas inteligentes diseñadas para testear y validar tu crecimiento.",
       icon: <Lightbulb className="w-8 h-8 text-solemia-coral" />,
       color: "from-solemia-coral/20 to-transparent"
     },
@@ -33,10 +33,10 @@ export function WhoWeServe() {
     <section id="who-we-serve" className="py-24 bg-card relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-sm font-bold tracking-widest text-solemia-purple uppercase mb-3">Who We Serve</h2>
-          <h3 className="text-3xl md:text-5xl font-bold text-foreground mb-6">Built for every stage of growth</h3>
+          <h2 className="text-sm font-bold tracking-widest text-solemia-purple uppercase mb-3">A quién servimos</h2>
+          <h3 className="text-3xl md:text-5xl font-bold text-foreground mb-6">Hecho para cada etapa de crecimiento</h3>
           <p className="text-lg text-muted-foreground">
-            Whether you are a solo entrepreneur or a growing medium enterprise, our AI solutions adapt to your specific scale and complexity.
+            Ya seas un emprendedor independiente o una mediana empresa en expansión, nuestras soluciones de IA se adaptan a tu escala y complejidad.
           </p>
         </div>
 
