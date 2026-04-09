@@ -1,0 +1,28 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "solemia-web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@workspace/solemia-web", "dev"],
+      "port": 5173,
+      "env": {
+        "PORT": "5173",
+        "BASE_PATH": "/",
+        "MSYS_NO_PATHCONV": "1"
+      }
+    },
+    {
+      "name": "api-server",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@workspace/api-server", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "mockup-sandbox",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@workspace/mockup-sandbox", "dev"],
+      "port": 5174
+    }
+  ]
+}
