@@ -131,8 +131,12 @@ function sendFormEmail(d: QData) {
 
 function CalComEmbed({ data }: { data: QData }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const didInit = useRef(false);
 
   useEffect(() => {
+    if (didInit.current || !containerRef.current) return;
+    didInit.current = true;
+
     const notes = [
       `Negocio: ${data.nombreNegocio}`,
       `Giro: ${data.giro === "otro" ? data.giroOtro : data.giro}`,
@@ -146,27 +150,47 @@ function CalComEmbed({ data }: { data: QData }) {
       ].join(", ")}`,
     ].join("\n");
 
-    const script = document.createElement("script");
-    script.src = "https://app.cal.com/embed/embed.js";
-    script.async = true;
-    script.onload = () => {
-      const Cal = (window as any).Cal;
-      if (!Cal || !containerRef.current) return;
-      Cal("inline", {
-        elementOrSelector: containerRef.current,
-        calLink: "solemia-s7l5nq/diagnostico-solemia",
-        config: {
-          name:  data.nombreResponde,
-          notes,
-          theme: "light",
-        },
-      });
-    };
-    document.head.appendChild(script);
+    // Official Cal.com embed IIFE — queues commands before the script loads
+    const win = window as any;
+    if (!win.Cal) {
+      (function (C: any, A: string, L: string) {
+        const p = (a: any, ar: any) => { a.q.push(ar); };
+        C.Cal = function (...args: any[]) {
+          const cal = C.Cal;
+          if (!cal.loaded) {
+            cal.ns  = {};
+            cal.q   = cal.q || [];
+            const s = document.createElement("script") as HTMLScriptElement;
+            s.src   = A;
+            s.async = true;
+            document.head.appendChild(s);
+            cal.loaded = true;
+          }
+          if (args[0] === L) {
+            const api: any = (...a: any[]) => p(api, a);
+            api.q = api.q || [];
+            const ns = args[1];
+            if (typeof ns === "string") { (cal.ns[ns] = api) && p(api, args); return; }
+            p(cal, args);
+            return;
+          }
+          p(cal, args);
+        };
+      })(win, "https://app.cal.com/embed/embed.js", "init");
+    }
 
-    return () => {
-      try { document.head.removeChild(script); } catch {}
-    };
+    win.Cal("init", { origin: "https://app.cal.com" });
+    win.Cal("inline", {
+      elementOrSelector: containerRef.current,
+      calLink: "solemia-s7l5nq/diagnostico-solemia",
+      config: {
+        name:   data.nombreResponde,
+        notes,
+        layout: "month_view",
+        theme:  "light",
+      },
+    });
+    win.Cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
   }, []);
 
   return (
