@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Video, MapPin, ChevronLeft, Check } from "lucide-react";
+import emailjs from "@emailjs/browser";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -98,36 +99,79 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
   return <p className="text-sm font-semibold mb-2" style={{ color: "#252525" }}>{children}</p>;
 }
 
-// ─── Calendly embed ───────────────────────────────────────────────────────────
+// ─── EmailJS send ─────────────────────────────────────────────────────────────
 
-function CalendlyEmbed({ name }: { name: string }) {
+function sendFormEmail(d: QData) {
+  emailjs.send(
+    "service_kw9prcs",
+    "template_2liyh6x",
+    {
+      nombreNegocio:  d.nombreNegocio,
+      nombreResponde: d.nombreResponde,
+      puesto:         d.puesto,
+      giro:           d.giro === "otro" ? d.giroOtro : d.giro,
+      equipo:         d.equipo,
+      clientes:       d.clientes,
+      rA:             d.rA,
+      rB:             d.rB,
+      rC:             d.rC,
+      rD:             d.rD,
+      rE:             d.rE,
+      escalabilidad:  d.escalabilidad,
+      problemas:      [
+        ...d.problemas.filter(p => p !== "otro"),
+        ...(d.problemas.includes("otro") && d.problemasOtro ? [d.problemasOtro] : []),
+      ].join(", "),
+    },
+    "xaS98tzhaYF8KYWdv",
+  ).catch(err => console.error("EmailJS error:", err));
+}
+
+// ─── Cal.com inline embed ─────────────────────────────────────────────────────
+
+function CalComEmbed({ data }: { data: QData }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://assets.calendly.com/assets/external/widget.css";
-    document.head.appendChild(link);
+    const notes = [
+      `Negocio: ${data.nombreNegocio}`,
+      `Giro: ${data.giro === "otro" ? data.giroOtro : data.giro}`,
+      `Equipo: ${data.equipo}`,
+      `Clientes/mes: ${data.clientes}`,
+      `Operaciones — Atención: ${data.rA}/5 · Registro: ${data.rB}/5 · Comunicación: ${data.rC}/5 · Seguimiento: ${data.rD}/5 · Documentos: ${data.rE}/5`,
+      `Escalabilidad: ${data.escalabilidad}/5`,
+      `Áreas problema: ${[
+        ...data.problemas.filter(p => p !== "otro"),
+        ...(data.problemas.includes("otro") && data.problemasOtro ? [data.problemasOtro] : []),
+      ].join(", ")}`,
+    ].join("\n");
 
     const script = document.createElement("script");
-    script.src = "https://assets.calendly.com/assets/external/widget.js";
+    script.src = "https://app.cal.com/embed/embed.js";
     script.async = true;
     script.onload = () => {
-      // @ts-ignore
-      window.Calendly?.initInlineWidget({
-        // ↓ Reemplaza con tu link de Calendly
-        url: "https://calendly.com/solemia/diagnostico",
-        parentElement: document.getElementById("calendly-mount"),
-        prefill: { name },
+      const Cal = (window as any).Cal;
+      if (!Cal || !containerRef.current) return;
+      Cal("inline", {
+        elementOrSelector: containerRef.current,
+        calLink: "solemia-s7l5nq/diagnostico-solemia",
+        config: {
+          name:  data.nombreResponde,
+          notes,
+          theme: "light",
+        },
       });
     };
-    document.body.appendChild(script);
+    document.head.appendChild(script);
 
     return () => {
-      try { document.head.removeChild(link); } catch {}
-      try { document.body.removeChild(script); } catch {}
+      try { document.head.removeChild(script); } catch {}
     };
   }, []);
 
-  return <div id="calendly-mount" style={{ minWidth: "320px", height: "650px" }} />;
+  return (
+    <div ref={containerRef} style={{ minWidth: "320px", height: "700px", width: "100%" }} />
+  );
 }
 
 // ─── Form wrapper ─────────────────────────────────────────────────────────────
@@ -353,7 +397,7 @@ export function CTA() {
           {/* ── C: CAPACIDAD ── */}
           {step === "c" && (
             <motion.div key="c" {...slideIn}>
-              <FormWrapper title="Tu operación a fondo" progress={2} onBack={() => setStep("b")} onNext={() => setStep("calendar")} canNext={canC} nextLabel="Ver disponibilidad">
+              <FormWrapper title="Tu operación a fondo" progress={2} onBack={() => setStep("b")} onNext={() => { sendFormEmail(data); setStep("calendar"); }} canNext={canC} nextLabel="Ver disponibilidad">
                 <p className="text-xs font-bold uppercase tracking-widest mb-5" style={{ color: "#C32D4B" }}>C. Capacidad y cuellos de botella</p>
 
                 <div>
@@ -411,7 +455,7 @@ export function CTA() {
                   <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>30 minutos · Remoto (Google Meet) o presencial en Mérida</p>
                 </div>
                 <div className="rounded-2xl overflow-hidden" style={{ background: "#fff" }}>
-                  <CalendlyEmbed name={data.nombreResponde} />
+                  <CalComEmbed data={data} />
                 </div>
               </div>
             </motion.div>
