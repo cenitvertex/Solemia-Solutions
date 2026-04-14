@@ -137,19 +137,6 @@ function CalComEmbed({ data }: { data: QData }) {
     if (didInit.current || !containerRef.current) return;
     didInit.current = true;
 
-    const notes = [
-      `Negocio: ${data.nombreNegocio}`,
-      `Giro: ${data.giro === "otro" ? data.giroOtro : data.giro}`,
-      `Equipo: ${data.equipo}`,
-      `Clientes/mes: ${data.clientes}`,
-      `Operaciones — Atención: ${data.rA}/5 · Registro: ${data.rB}/5 · Comunicación: ${data.rC}/5 · Seguimiento: ${data.rD}/5 · Documentos: ${data.rE}/5`,
-      `Escalabilidad: ${data.escalabilidad}/5`,
-      `Áreas problema: ${[
-        ...data.problemas.filter(p => p !== "otro"),
-        ...(data.problemas.includes("otro") && data.problemasOtro ? [data.problemasOtro] : []),
-      ].join(", ")}`,
-    ].join("\n");
-
     // Official Cal.com embed IIFE — queues commands before the script loads
     const win = window as any;
     if (!win.Cal) {
@@ -185,7 +172,6 @@ function CalComEmbed({ data }: { data: QData }) {
       calLink: "solemia-s7l5nq/diagnostico-solemia",
       config: {
         name:   data.nombreResponde,
-        notes,
         layout: "month_view",
         theme:  "light",
       },
@@ -194,7 +180,7 @@ function CalComEmbed({ data }: { data: QData }) {
   }, []);
 
   return (
-    <div ref={containerRef} style={{ minWidth: "320px", height: "700px", width: "100%" }} />
+    <div ref={containerRef} style={{ minWidth: "320px", height: "900px", width: "100%" }} />
   );
 }
 
