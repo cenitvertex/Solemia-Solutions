@@ -8,16 +8,14 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navLinks = [
-    { label: "A quién servimos", href: "#who-we-serve" },
-    { label: "Soluciones", href: "#solutions" },
+    { label: "Industrias", href: "#who-we-serve" },
+    { label: "Cómo funciona", href: "#solutions" },
     { label: "Por qué Solemia", href: "#why-solemia" },
   ];
 
@@ -34,7 +32,7 @@ export function Navbar() {
               <img
                 src={`${import.meta.env.BASE_URL}solemia-logo.jpg`}
                 alt="Logo de Solemia"
-                className="h-8 md:h-10 object-contain rounded-sm"
+                className="h-8 md:h-9 object-contain rounded-sm"
               />
             </Link>
           </div>
@@ -45,31 +43,37 @@ export function Navbar() {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-sm font-medium text-foreground/80 hover:text-solemia-coral transition-colors"
+                className="text-sm font-semibold transition-colors duration-200"
+                style={{ color: "rgba(37,37,37,0.7)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#C32D4B")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(37,37,37,0.7)")}
               >
                 {link.label}
               </a>
             ))}
-            <a
+            <motion.a
               href="#contact"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-solemia-charcoal text-white hover:bg-solemia-charcoal/90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+              whileHover={{ scale: 1.03, y: -1 }}
+              whileTap={{ scale: 0.97 }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold text-white shadow-md transition-shadow duration-200"
+              style={{
+                background: "linear-gradient(135deg, #C32D4B, #4B0F3C)",
+                boxShadow: "0 4px 20px rgba(195,45,75,0.3)",
+              }}
             >
-              Comenzar
-              <ArrowRight className="w-4 h-4" />
-            </a>
+              Diagnóstico gratis
+              <ArrowRight className="w-3.5 h-3.5" />
+            </motion.a>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-foreground p-2 focus:outline-none"
+              className="p-2 focus:outline-none"
+              style={{ color: "#252525" }}
             >
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
@@ -82,6 +86,7 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
             className="md:hidden glass-nav border-b border-border"
           >
             <div className="px-4 pt-2 pb-6 space-y-1">
@@ -90,7 +95,8 @@ export function Navbar() {
                   key={link.label}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-3 text-base font-medium text-foreground hover:bg-muted rounded-lg"
+                  className="block px-3 py-3 text-base font-semibold rounded-lg transition-colors"
+                  style={{ color: "#252525" }}
                 >
                   {link.label}
                 </a>
@@ -98,9 +104,10 @@ export function Navbar() {
               <a
                 href="#contact"
                 onClick={() => setMobileMenuOpen(false)}
-                className="mt-4 flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl text-base font-semibold bg-gradient-brand text-white shadow-md"
+                className="mt-4 flex items-center justify-center gap-2 w-full px-5 py-3.5 rounded-xl text-base font-bold text-white"
+                style={{ background: "linear-gradient(135deg, #C32D4B, #4B0F3C)" }}
               >
-                Comenzar
+                Diagnóstico gratis
                 <ArrowRight className="w-4 h-4" />
               </a>
             </div>

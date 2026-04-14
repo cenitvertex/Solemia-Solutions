@@ -1,123 +1,213 @@
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronRight, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronRight, CheckCheck } from "lucide-react";
 
-export function Hero() {
+const chatMessages = [
+  { id: 1, from: "client", avatar: "M", name: "María L.", text: "Hola, ¿tienen cita disponible mañana?", time: "14:22" },
+  { id: 2, from: "agent", text: "¡Hola María! Sí, tenemos a las 10:00am y 3:00pm. ¿Cuál te funciona mejor? 😊", time: "14:22" },
+  { id: 3, from: "client", avatar: "M", name: "María L.", text: "Las 10am perfecta 👍", time: "14:23" },
+  { id: 4, from: "agent", text: "Listo, cita confirmada mañana 10:00am. Te envío recordatorio antes ✅", time: "14:23" },
+];
+
+const metrics = [
+  { label: "Citas hoy", value: "18", color: "#C32D4B" },
+  { label: "Confirmadas", value: "16", color: "#961E5A" },
+  { label: "No-shows evitados", value: "3", color: "#4B0F3C" },
+];
+
+function PanelMockup() {
   return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-background">
-      {/* Background Image / Pattern */}
-      <div className="absolute inset-0 z-0 opacity-10 md:opacity-20 mix-blend-multiply dark:mix-blend-screen pointer-events-none">
-        <img
-          src={`${import.meta.env.BASE_URL}images/hero-bg.png`}
-          alt=""
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background"></div>
-      </div>
+    <div className="relative w-full max-w-md ml-auto">
+      {/* Glow behind card */}
+      <div
+        className="absolute -inset-6 rounded-3xl blur-2xl opacity-30 pointer-events-none"
+        style={{ background: "linear-gradient(135deg, #C32D4B, #4B0F3C)" }}
+      />
 
-      {/* Glowing Orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-solemia-purple/20 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-solemia-coral/20 rounded-full blur-[120px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-center lg:text-left pt-10 lg:pt-0"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/80 backdrop-blur-sm border border-border mb-6"
-            >
-              <Sparkles className="w-4 h-4 text-solemia-coral" />
-              <span className="text-sm font-semibold text-foreground">
-                Soluciones estandarizadas de nueva generación
-              </span>
-            </motion.div>
-
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] mb-6 text-foreground">
-              Potenciando negocios más inteligentes con <span className="text-gradient">IA</span>
-            </h1>
-            
-            <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto lg:mx-0 font-medium">
-              Construimos soluciones y sistemas estandarizados con inteligencia artificial, diseñados específicamente para escalar micro, pequeñas y medianas empresas.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-              <a
-                href="#contact"
-                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-bold bg-gradient-brand text-white shadow-lg shadow-solemia-coral/25 hover:shadow-xl hover:shadow-solemia-coral/40 hover:-translate-y-1 transition-all duration-300"
-              >
-                Transforma tu negocio
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </a>
-              <a
-                href="#solutions"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-bold bg-card border border-border text-foreground hover:bg-muted hover:border-solemia-purple/30 transition-all duration-300"
-              >
-                Ver soluciones
-                <ChevronRight className="w-5 h-5" />
-              </a>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.4 }}
+        className="relative bg-white rounded-2xl shadow-2xl overflow-hidden"
+        style={{ border: "1px solid rgba(195,45,75,0.15)" }}
+      >
+        {/* Header */}
+        <div style={{ background: "linear-gradient(135deg, #C32D4B 0%, #4B0F3C 100%)" }} className="px-5 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-white/60 text-xs font-semibold uppercase tracking-widest mb-0.5">Panel del Dueño</p>
+              <p className="text-white font-bold text-sm">Dental García · Mérida</p>
             </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="relative hidden lg:block"
-          >
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-solemia-purple/20 border border-white/10">
-              <img
-                src={`${import.meta.env.BASE_URL}images/ai-abstract.png`}
-                alt="Integración con IA"
-                className="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700"
+            <div className="flex items-center gap-1.5 bg-white/10 rounded-full px-3 py-1.5">
+              <motion.div
+                className="w-1.5 h-1.5 rounded-full bg-green-400"
+                animate={{ opacity: [1, 0.4, 1] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-tr from-solemia-charcoal/40 to-transparent pointer-events-none"></div>
+              <span className="text-white/90 text-xs font-semibold">Agente activo</span>
             </div>
-            
-            {/* Floating Stats Card */}
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-              className="absolute -bottom-8 -left-8 bg-card p-6 rounded-2xl shadow-xl border border-border/50 backdrop-blur-xl"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-solemia-coral/10 flex items-center justify-center">
-                  <TrendingUpIcon className="w-6 h-6 text-solemia-coral" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground font-medium">Aumento de eficiencia</p>
-                  <p className="text-2xl font-bold text-foreground">+300%</p>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
+          </div>
         </div>
-      </div>
-    </section>
+
+        {/* Metrics */}
+        <div className="grid grid-cols-3 divide-x divide-gray-100 border-b border-gray-100">
+          {metrics.map((m, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 + i * 0.1 }}
+              className="py-3 px-2 text-center"
+            >
+              <p className="text-xl font-bold" style={{ color: m.color }}>{m.value}</p>
+              <p className="text-xs text-gray-400 leading-tight mt-0.5">{m.label}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Chat */}
+        <div className="p-4 space-y-3" style={{ background: "#F9F6F8" }}>
+          <div className="flex items-center gap-2 mb-2">
+            <motion.div
+              className="w-1.5 h-1.5 rounded-full bg-green-400"
+              animate={{ opacity: [1, 0.4, 1] }}
+              transition={{ repeat: Infinity, duration: 1.5, delay: 0.3 }}
+            />
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">WhatsApp Business · En vivo</p>
+          </div>
+
+          {chatMessages.map((msg, i) => (
+            <motion.div
+              key={msg.id}
+              initial={{ opacity: 0, y: 8, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 1 + i * 1.1, duration: 0.35, ease: "easeOut" }}
+            >
+              {msg.from === "client" ? (
+                <div className="flex items-end gap-2">
+                  <div className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-xs font-bold text-gray-600 flex-shrink-0">
+                    {msg.avatar}
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 mb-1">{msg.name}</p>
+                    <div className="bg-white rounded-2xl rounded-bl-none px-3 py-2 shadow-sm inline-block">
+                      <p className="text-sm text-gray-700">{msg.text}</p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex justify-end">
+                  <div
+                    className="rounded-2xl rounded-br-none px-3 py-2 shadow-sm max-w-[230px]"
+                    style={{ background: "linear-gradient(135deg, #C32D4B, #961E5A)" }}
+                  >
+                    <p className="text-xs text-white/60 font-semibold mb-1">Agente Solemia</p>
+                    <p className="text-sm text-white leading-snug">{msg.text}</p>
+                    <div className="flex items-center justify-end gap-1 mt-1">
+                      <span className="text-xs text-white/40">{msg.time}</span>
+                      <CheckCheck className="w-3 h-3 text-white/40" />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    </div>
   );
 }
 
-function TrendingUpIcon(props: React.SVGProps<SVGSVGElement>) {
+export function Hero() {
   return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
-      <polyline points="16 7 22 7 22 13" />
-    </svg>
+    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden" style={{ background: "#F9F6F8" }}>
+      {/* Ambient gradient orbs */}
+      <div
+        className="absolute top-0 right-0 w-[700px] h-[700px] rounded-full blur-[120px] pointer-events-none opacity-20"
+        style={{ background: "#C32D4B" }}
+      />
+      <div
+        className="absolute bottom-0 left-1/4 w-[500px] h-[500px] rounded-full blur-[120px] pointer-events-none opacity-15"
+        style={{ background: "#4B0F3C" }}
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center py-20">
+
+          {/* Left — Copy */}
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.15, duration: 0.4 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-7"
+              style={{ borderColor: "rgba(195,45,75,0.25)", background: "rgba(195,45,75,0.06)" }}
+            >
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#C32D4B" }} />
+              <span className="text-sm font-semibold" style={{ color: "#252525" }}>Sistemas Agénticos de IA · Mérida</span>
+            </motion.div>
+
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] mb-6" style={{ color: "#252525" }}>
+              Sistemas de IA que resuelven los{" "}
+              <span className="text-gradient">cuellos de botella</span>{" "}
+              de tu negocio.
+            </h1>
+
+            <p className="text-lg leading-relaxed mb-10 max-w-lg" style={{ color: "#6b6b6b" }}>
+              Los negocios no necesitan más tecnología — necesitan tecnología que funcione para ellos. Cada sistema que construimos está diseñado para tu industria específica. Sin ruido, sin fricciones.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <motion.a
+                href="#contact"
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl text-base font-bold text-white shadow-lg transition-shadow duration-200"
+                style={{
+                  background: "linear-gradient(135deg, #C32D4B, #4B0F3C)",
+                  boxShadow: "0 8px 30px rgba(195,45,75,0.3)",
+                }}
+              >
+                Agenda tu diagnóstico
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+              </motion.a>
+              <motion.a
+                href="#solutions"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl text-base font-bold bg-white border transition-all duration-200"
+                style={{ color: "#252525", borderColor: "rgba(37,37,37,0.15)" }}
+              >
+                Ver cómo funciona
+                <ChevronRight className="w-5 h-5" />
+              </motion.a>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2 }}
+              className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-8"
+            >
+              {["Diagnóstico gratuito", "Propuesta en 48h", "Sin permanencia"].map((item, i) => (
+                <div key={i} className="flex items-center gap-1.5">
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#C32D4B" }} />
+                  <span className="text-sm font-medium" style={{ color: "#6b6b6b" }}>{item}</span>
+                </div>
+              ))}
+            </motion.div>
+          </motion.div>
+
+          {/* Right — Animated Panel */}
+          <div className="hidden lg:block">
+            <PanelMockup />
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

@@ -1,59 +1,100 @@
 import { motion } from "framer-motion";
-import { Layers, Maximize, BrainCircuit } from "lucide-react";
+import { Search, MonitorSmartphone, TrendingUp } from "lucide-react";
+
+const differentiators = [
+  {
+    icon: <Search className="w-8 h-8 text-white" />,
+    title: "Primero entendemos. Luego cobramos.",
+    description:
+      "El diagnóstico es gratuito. En 60 minutos identificamos el cuello de botella, lo cuantificamos en dinero real y te entregamos una propuesta en 48 horas. Si no tiene sentido para tu negocio, no hay propuesta.",
+    detail: "Diagnóstico sin costo · Propuesta en 48h",
+    gradient: "linear-gradient(135deg, #C32D4B, #961E5A)",
+  },
+  {
+    icon: <MonitorSmartphone className="w-8 h-8 text-white" />,
+    title: "Tú ves todo lo que hace el sistema.",
+    description:
+      "El Panel del Dueño te da visibilidad total: qué hizo el agente hoy, cuántos mensajes atendió, cuántas citas confirmó, qué escaló al humano. Sin depender de nadie para saber si el sistema está funcionando.",
+    detail: "Panel en tiempo real · Métricas clave",
+    gradient: "linear-gradient(135deg, #961E5A, #671649)",
+  },
+  {
+    icon: <TrendingUp className="w-8 h-8 text-white" />,
+    title: "La cuota se ajusta a los resultados reales.",
+    description:
+      "A los 3 meses revisamos los KPIs juntos. Si el sistema generó más valor del esperado, la mensualidad puede subir. Si no llegó al objetivo, baja o se ajusta. Pagás por lo que funciona, no por promesas.",
+    detail: "Revisión de KPIs a 3 meses · Sin anualidades",
+    gradient: "linear-gradient(135deg, #671649, #4B0F3C)",
+  },
+];
 
 export function WhySolemia() {
-  const features = [
-    {
-      title: "Estandarizado",
-      description: "Sin desarrollos a medida interminables. Ofrecemos soluciones listas para usar, configuradas para generar impacto de inmediato.",
-      icon: <Layers className="w-10 h-10 text-white" />,
-      bg: "bg-solemia-charcoal"
-    },
-    {
-      title: "Escalable",
-      description: "Sistemas diseñados para crecer contigo. Atiende 10 clientes o 10.000 sin que nada se rompa.",
-      icon: <Maximize className="w-10 h-10 text-white" />,
-      bg: "bg-solemia-purple"
-    },
-    {
-      title: "Inteligente",
-      description: "Construido con IA en el núcleo, no como un añadido. Nuestros sistemas aprenden, se adaptan y mejoran con el tiempo.",
-      icon: <BrainCircuit className="w-10 h-10 text-white" />,
-      bg: "bg-solemia-coral"
-    }
-  ];
-
   return (
-    <section id="why-solemia" className="py-24 bg-card">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-6">¿Por qué elegir Solemia?</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Acercamos la inteligencia artificial de nivel empresarial a las necesidades concretas de los negocios más pequeños.
-          </p>
-        </div>
+    <section id="why-solemia" className="py-24 bg-white relative overflow-hidden">
+      <div
+        className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[120px] opacity-5 pointer-events-none"
+        style={{ background: "#C32D4B" }}
+      />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-2xl mx-auto mb-16"
+        >
+          <p className="text-sm font-bold tracking-widest uppercase mb-3" style={{ color: "#C32D4B" }}>
+            Por qué Solemia
+          </p>
+          <h2 className="text-3xl md:text-5xl font-bold mb-5" style={{ color: "#252525" }}>
+            Somos un{" "}
+            <span className="text-gradient">aliado real.</span>{" "}
+            No solo un proveedor.
+          </h2>
+          <p className="text-lg" style={{ color: "#6b6b6b" }}>
+            Hablamos directo y cumplimos lo que prometemos.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {differentiators.map((d, i) => (
             <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
+              key={i}
+              initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.15, duration: 0.5 }}
-              className="relative p-8 rounded-3xl overflow-hidden group"
+              transition={{ delay: i * 0.15, duration: 0.5 }}
+              whileHover={{ y: -4 }}
+              className="group relative rounded-2xl p-8 border transition-all duration-300"
+              style={{
+                borderColor: "rgba(195,45,75,0.12)",
+                boxShadow: "0 2px 16px rgba(37,37,37,0.06)",
+              }}
             >
-              <div className="absolute inset-0 bg-background border border-border rounded-3xl transition-transform duration-500 group-hover:scale-[0.98]" />
-              
-              <div className="relative z-10 flex flex-col h-full">
-                <div className={`w-20 h-20 rounded-2xl ${feature.bg} flex items-center justify-center mb-8 shadow-lg transform -rotate-3 group-hover:rotate-0 transition-transform duration-300`}>
-                  {feature.icon}
-                </div>
-                
-                <h3 className="text-2xl font-bold text-foreground mb-4">{feature.title}</h3>
-                <p className="text-muted-foreground flex-grow text-lg leading-relaxed">
-                  {feature.description}
-                </p>
+              {/* Top gradient accent on hover */}
+              <div
+                className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ background: d.gradient }}
+              />
+
+              {/* Icon */}
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center mb-7 shadow-lg"
+                style={{ background: d.gradient }}
+              >
+                {d.icon}
+              </div>
+
+              <h3 className="text-xl font-bold mb-4" style={{ color: "#252525" }}>{d.title}</h3>
+              <p className="text-base leading-relaxed mb-6" style={{ color: "#6b6b6b" }}>{d.description}</p>
+
+              <div
+                className="inline-flex items-center gap-2 text-sm font-semibold"
+                style={{ color: "#C32D4B" }}
+              >
+                <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#C32D4B" }} />
+                {d.detail}
               </div>
             </motion.div>
           ))}
