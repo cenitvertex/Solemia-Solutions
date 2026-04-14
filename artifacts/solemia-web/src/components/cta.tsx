@@ -10,6 +10,7 @@ type FormStep = "intro" | "a" | "b" | "c" | "calendar";
 interface QData {
   nombreNegocio: string;
   nombreResponde: string;
+  correo: string;
   puesto: string;
   giro: string;
   giroOtro: string;
@@ -26,7 +27,7 @@ interface QData {
 }
 
 const initial: QData = {
-  nombreNegocio: "", nombreResponde: "", puesto: "",
+  nombreNegocio: "", nombreResponde: "", correo: "", puesto: "",
   giro: "", giroOtro: "", equipo: "", clientes: "",
   rA: 0, rB: 0, rC: 0, rD: 0, rE: 0,
   escalabilidad: 0, problemas: [], problemasOtro: "",
@@ -108,6 +109,7 @@ function sendFormEmail(d: QData) {
     {
       nombreNegocio:  d.nombreNegocio,
       nombreResponde: d.nombreResponde,
+      correo:         d.correo,
       puesto:         d.puesto,
       giro:           d.giro === "otro" ? d.giroOtro : d.giro,
       equipo:         d.equipo,
@@ -172,6 +174,7 @@ function CalComEmbed({ data }: { data: QData }) {
       calLink: "solemia-s7l5nq/diagnostico-solemia",
       config: {
         name:   data.nombreResponde,
+        email:  data.correo,
         layout: "month_view",
         theme:  "light",
       },
@@ -255,7 +258,7 @@ export function CTA() {
   const toggleProblema = (val: string) =>
     set("problemas", data.problemas.includes(val) ? data.problemas.filter(p => p !== val) : [...data.problemas, val]);
 
-  const canA = !!(data.giro && data.equipo && data.clientes);
+  const canA = !!(data.giro && data.equipo && data.clientes && data.correo && data.correo.includes("@"));
   const canB = !!(data.rA && data.rB && data.rC && data.rD && data.rE);
   const canC = !!(data.escalabilidad && data.problemas.length > 0);
 
@@ -333,6 +336,17 @@ export function CTA() {
                     <TextInput value={data.nombreNegocio} onChange={v => set("nombreNegocio", v)} placeholder="Ej. Clínica Dental García" /></div>
                   <div><FieldLabel>Tu nombre</FieldLabel>
                     <TextInput value={data.nombreResponde} onChange={v => set("nombreResponde", v)} placeholder="Nombre completo" /></div>
+                  <div><FieldLabel>Correo electrónico</FieldLabel>
+                    <input
+                      type="email"
+                      value={data.correo}
+                      onChange={e => set("correo", e.target.value)}
+                      placeholder="tu@correo.com"
+                      style={{ fontFamily: "inherit", borderColor: "#e5e7eb", color: "#252525" }}
+                      className="w-full px-4 py-2.5 rounded-lg border text-sm outline-none transition-colors"
+                      onFocus={e => (e.currentTarget.style.borderColor = "#C32D4B")}
+                      onBlur={e => (e.currentTarget.style.borderColor = "#e5e7eb")}
+                    /></div>
                   <div><FieldLabel>Puesto / Rol</FieldLabel>
                     <TextInput value={data.puesto} onChange={v => set("puesto", v)} placeholder="Ej. Dueño, Director, Gerente" /></div>
                 </div>
