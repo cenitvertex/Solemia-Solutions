@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/navbar";
 import { Hero } from "@/components/hero";
-import { WhoWeServe } from "@/components/who-we-serve";
+import { Problem } from "@/components/problem";
 import { Solutions } from "@/components/solutions";
 import { WhySolemia } from "@/components/why-solemia";
 import { CTA } from "@/components/cta";
@@ -12,7 +12,7 @@ export default function Home() {
       <Navbar />
       <main className="flex-grow">
         <Hero />
-        <WhoWeServe />
+        <Problem />
         <Solutions />
         <WhySolemia />
         <CTA />

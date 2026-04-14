@@ -1,89 +1,423 @@
-import { motion } from "framer-motion";
-import { ArrowRight, MapPin } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Video, MapPin, ChevronLeft, Check } from "lucide-react";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type FormStep = "intro" | "a" | "b" | "c" | "calendar";
+
+interface QData {
+  nombreNegocio: string;
+  nombreResponde: string;
+  puesto: string;
+  giro: string;
+  giroOtro: string;
+  equipo: string;
+  clientes: string;
+  rA: number;
+  rB: number;
+  rC: number;
+  rD: number;
+  rE: number;
+  escalabilidad: number;
+  problemas: string[];
+  problemasOtro: string;
+}
+
+const initial: QData = {
+  nombreNegocio: "", nombreResponde: "", puesto: "",
+  giro: "", giroOtro: "", equipo: "", clientes: "",
+  rA: 0, rB: 0, rC: 0, rD: 0, rE: 0,
+  escalabilidad: 0, problemas: [], problemasOtro: "",
+};
+
+// ─── Atoms ────────────────────────────────────────────────────────────────────
+
+function TextInput({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder?: string }) {
+  return (
+    <input
+      type="text"
+      value={value}
+      onChange={e => onChange(e.target.value)}
+      placeholder={placeholder}
+      style={{ fontFamily: "inherit", borderColor: "#e5e7eb", color: "#252525" }}
+      className="w-full px-4 py-2.5 rounded-lg border text-sm outline-none transition-colors"
+      onFocus={e => (e.currentTarget.style.borderColor = "#C32D4B")}
+      onBlur={e => (e.currentTarget.style.borderColor = "#e5e7eb")}
+    />
+  );
+}
+
+function RadioOpt({ label, checked, onChange }: { label: string; checked: boolean; onChange: () => void }) {
+  return (
+    <label className="flex items-center gap-3 py-1.5 cursor-pointer" onClick={onChange}>
+      <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all"
+        style={{ borderColor: checked ? "#C32D4B" : "#d1d5db" }}>
+        {checked && <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#C32D4B" }} />}
+      </div>
+      <span className="text-sm" style={{ color: "#252525" }}>{label}</span>
+    </label>
+  );
+}
+
+function CheckOpt({ label, checked, onChange }: { label: string; checked: boolean; onChange: () => void }) {
+  return (
+    <label className="flex items-center gap-3 py-1.5 cursor-pointer" onClick={onChange}>
+      <div className="w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all"
+        style={{ borderColor: checked ? "#C32D4B" : "#d1d5db", background: checked ? "#C32D4B" : "transparent" }}>
+        {checked && <Check className="w-3 h-3 text-white" />}
+      </div>
+      <span className="text-sm" style={{ color: "#252525" }}>{label}</span>
+    </label>
+  );
+}
+
+function Rating({ value, onChange, left, right }: { value: number; onChange: (v: number) => void; left: string; right: string }) {
+  return (
+    <div>
+      <div className="flex gap-2 mb-1.5">
+        {[1, 2, 3, 4, 5].map(n => (
+          <button key={n} type="button" onClick={() => onChange(n)}
+            className="w-9 h-9 rounded-full border-2 text-sm font-bold transition-all duration-150 flex items-center justify-center"
+            style={value === n
+              ? { background: "linear-gradient(135deg, #C32D4B, #4B0F3C)", borderColor: "transparent", color: "#fff" }
+              : { borderColor: "#e5e7eb", color: "#9b9b9b" }}>
+            {n}
+          </button>
+        ))}
+      </div>
+      <div className="flex justify-between text-xs" style={{ color: "#9b9b9b" }}>
+        <span>{left}</span>
+        <span>{right}</span>
+      </div>
+    </div>
+  );
+}
+
+function FieldLabel({ children }: { children: React.ReactNode }) {
+  return <p className="text-sm font-semibold mb-2" style={{ color: "#252525" }}>{children}</p>;
+}
+
+// ─── Calendly embed ───────────────────────────────────────────────────────────
+
+function CalendlyEmbed({ name }: { name: string }) {
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://assets.calendly.com/assets/external/widget.css";
+    document.head.appendChild(link);
+
+    const script = document.createElement("script");
+    script.src = "https://assets.calendly.com/assets/external/widget.js";
+    script.async = true;
+    script.onload = () => {
+      // @ts-ignore
+      window.Calendly?.initInlineWidget({
+        // ↓ Reemplaza con tu link de Calendly
+        url: "https://calendly.com/solemia/diagnostico",
+        parentElement: document.getElementById("calendly-mount"),
+        prefill: { name },
+      });
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      try { document.head.removeChild(link); } catch {}
+      try { document.body.removeChild(script); } catch {}
+    };
+  }, []);
+
+  return <div id="calendly-mount" style={{ minWidth: "320px", height: "650px" }} />;
+}
+
+// ─── Form wrapper ─────────────────────────────────────────────────────────────
+
+const STEP_NAMES = ["Sobre tu negocio", "Tu operación", "Capacidad"];
+
+function FormWrapper({ title, progress, onBack, onNext, canNext, nextLabel = "Continuar", children }: {
+  title: string; progress: number; onBack: () => void; onNext: () => void;
+  canNext: boolean; nextLabel?: string; children: React.ReactNode;
+}) {
+  return (
+    <div className="max-w-2xl mx-auto">
+      {/* Progress bar */}
+      <div className="flex items-center gap-3 mb-6">
+        <button onClick={onBack} className="p-1.5 rounded-lg transition-colors hover:bg-white/10 flex-shrink-0"
+          style={{ color: "rgba(255,255,255,0.5)" }}>
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+        <div className="flex flex-1 items-center gap-2">
+          {STEP_NAMES.map((s, i) => (
+            <div key={s} className="flex items-center gap-2 flex-1">
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                <div className="w-2 h-2 rounded-full transition-all duration-300"
+                  style={{ background: i <= progress ? "#C32D4B" : "rgba(255,255,255,0.2)" }} />
+                <span className="text-xs font-semibold hidden sm:block transition-colors duration-300"
+                  style={{ color: i === progress ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.3)" }}>
+                  {s}
+                </span>
+              </div>
+              {i < 2 && <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.12)" }} />}
+            </div>
+          ))}
+        </div>
+        <span className="text-xs font-semibold flex-shrink-0" style={{ color: "rgba(255,255,255,0.3)" }}>
+          {progress + 1}/3
+        </span>
+      </div>
+
+      {/* Card */}
+      <div className="rounded-2xl p-7 overflow-y-auto" style={{ background: "#fff", maxHeight: "68vh" }}>
+        <h3 className="text-xl font-bold mb-5" style={{ color: "#252525" }}>{title}</h3>
+        <div className="space-y-6">{children}</div>
+      </div>
+
+      {/* Footer */}
+      <div className="mt-4 flex justify-end">
+        <motion.button onClick={onNext} disabled={!canNext}
+          whileHover={canNext ? { scale: 1.02 } : {}} whileTap={canNext ? { scale: 0.98 } : {}}
+          className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white"
+          style={{
+            background: "linear-gradient(135deg, #C32D4B, #4B0F3C)",
+            opacity: canNext ? 1 : 0.35,
+            cursor: canNext ? "pointer" : "not-allowed",
+            boxShadow: canNext ? "0 6px 24px rgba(195,45,75,0.3)" : "none",
+          }}>
+          {nextLabel}
+          <ArrowRight className="w-4 h-4" />
+        </motion.button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main CTA ─────────────────────────────────────────────────────────────────
 
 export function CTA() {
+  const [step, setStep] = useState<FormStep>("intro");
+  const [data, setData] = useState<QData>(initial);
+
+  const set = (key: keyof QData, val: any) => setData(d => ({ ...d, [key]: val }));
+  const toggleProblema = (val: string) =>
+    set("problemas", data.problemas.includes(val) ? data.problemas.filter(p => p !== val) : [...data.problemas, val]);
+
+  const canA = !!(data.giro && data.equipo && data.clientes);
+  const canB = !!(data.rA && data.rB && data.rC && data.rD && data.rE);
+  const canC = !!(data.escalabilidad && data.problemas.length > 0);
+
+  const slideIn = { initial: { opacity: 0, x: 24 }, animate: { opacity: 1, x: 0 }, exit: { opacity: 0, x: -24 }, transition: { duration: 0.3 } };
+  const fadeUp  = { initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -16 }, transition: { duration: 0.35 } };
+
   return (
-    <section id="contact" className="py-24 relative overflow-hidden" style={{ background: "#252525" }}>
-      {/* Brand gradient orb */}
-      <div
-        className="absolute top-0 right-0 w-[700px] h-[700px] rounded-full blur-[150px] opacity-20 pointer-events-none"
-        style={{ background: "linear-gradient(135deg, #C32D4B, #4B0F3C)" }}
-      />
-      <div
-        className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full blur-[120px] opacity-10 pointer-events-none"
-        style={{ background: "#C32D4B" }}
-      />
+    <section id="contacto" className="pt-16 pb-20 relative overflow-hidden" style={{ background: "#252525" }}>
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[150px] opacity-15 pointer-events-none"
+        style={{ background: "linear-gradient(135deg, #C32D4B, #4B0F3C)" }} />
+      <div className="absolute bottom-0 left-0 w-[350px] h-[350px] rounded-full blur-[100px] opacity-8 pointer-events-none"
+        style={{ background: "#C32D4B" }} />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          {/* Label */}
-          <div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 mb-8"
-          >
-            <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-            <span className="text-white/80 text-sm font-semibold">Primeros clientes con condiciones especiales</span>
-          </div>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <AnimatePresence mode="wait">
 
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-[1.1]">
-            ¿Cuánto te está costando tu{" "}
-            <span
-              className="bg-clip-text text-transparent"
-              style={{ backgroundImage: "linear-gradient(135deg, #C32D4B, #961E5A, #e06080)" }}
-            >
-              cuello de botella
-            </span>{" "}
-            cada mes?
-          </h2>
+          {/* ── INTRO ── */}
+          {step === "intro" && (
+            <motion.div key="intro" {...fadeUp} className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+              <div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8"
+                  style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)" }}>
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
+                  <span className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.7)" }}>Agenda ahora</span>
+                </div>
+                <h2 className="font-bold text-white leading-[1.1] mb-6" style={{ fontSize: "clamp(28px, 3.2vw, 46px)" }}>
+                  ¿Cuál es el proceso que más te cuesta?
+                </h2>
+                <p className="text-lg mb-6 leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>
+                  En 30 minutos lo identificamos juntos.
+                </p>
+                <div className="space-y-3">
+                  {[
+                    { Icon: Video, text: "Diagnósticos de manera remota (Google Meet)" },
+                    { Icon: MapPin, text: "Diagnósticos de manera personal en Mérida, Yuc." },
+                  ].map(({ Icon, text }) => (
+                    <div key={text} className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                        style={{ background: "rgba(195,45,75,0.2)" }}>
+                        <Icon className="w-4 h-4" style={{ color: "#C32D4B" }} />
+                      </div>
+                      <p className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.45)" }}>{text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-          <p className="text-xl text-white/60 mb-12 max-w-2xl mx-auto leading-relaxed">
-            El diagnóstico es gratuito. En 60 minutos entendemos tu negocio, cuantificamos el problema y te mostramos exactamente cómo resolverlo. Sin compromiso.
-          </p>
+              <div className="rounded-2xl p-8" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                <p className="text-white font-bold text-xl mb-3">Empieza con el cuestionario</p>
+                <p className="text-sm mb-2 leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
+                  Toma ~5 minutos y nos ayuda a llegar a tu sesión con mejor contexto. Sin respuestas correctas ni incorrectas.
+                </p>
+                <p className="text-xs font-semibold mb-8" style={{ color: "rgba(255,255,255,0.25)" }}>
+                  Al terminar, podrás elegir fecha y hora de tu diagnóstico.
+                </p>
+                <motion.button onClick={() => setStep("a")}
+                  whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                  className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-base font-bold text-white"
+                  style={{ background: "linear-gradient(135deg, #C32D4B, #4B0F3C)", boxShadow: "0 8px 30px rgba(195,45,75,0.3)" }}>
+                  Iniciar cuestionario
+                  <ArrowRight className="w-5 h-5" />
+                </motion.button>
+                <p className="text-center text-xs mt-3" style={{ color: "rgba(255,255,255,0.2)" }}>Sin costo · Sin compromiso</p>
+              </div>
+            </motion.div>
+          )}
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
-            <motion.a
-              href="https://wa.me/529991234567?text=Hola,%20me%20interesa%20el%20diagnóstico%20gratuito%20de%20Solemia"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.03, y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-base font-bold text-white shadow-xl transition-all duration-200"
-              style={{
-                background: "linear-gradient(135deg, #C32D4B, #4B0F3C)",
-                boxShadow: "0 12px 40px rgba(195,45,75,0.4)",
-              }}
-            >
-              {/* WhatsApp icon */}
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-              </svg>
-              Agendar diagnóstico por WhatsApp
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </motion.a>
+          {/* ── A: SOBRE TU NEGOCIO ── */}
+          {step === "a" && (
+            <motion.div key="a" {...slideIn}>
+              <FormWrapper title="Sobre tu negocio" progress={0} onBack={() => setStep("intro")} onNext={() => setStep("b")} canNext={canA}>
+                {/* Header */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-6 mb-2 border-b" style={{ borderColor: "#f0eaec" }}>
+                  <div><FieldLabel>Nombre del negocio</FieldLabel>
+                    <TextInput value={data.nombreNegocio} onChange={v => set("nombreNegocio", v)} placeholder="Ej. Clínica Dental García" /></div>
+                  <div><FieldLabel>Tu nombre</FieldLabel>
+                    <TextInput value={data.nombreResponde} onChange={v => set("nombreResponde", v)} placeholder="Nombre completo" /></div>
+                  <div><FieldLabel>Puesto / Rol</FieldLabel>
+                    <TextInput value={data.puesto} onChange={v => set("puesto", v)} placeholder="Ej. Dueño, Director, Gerente" /></div>
+                </div>
 
-            <motion.a
-              href="mailto:hola@solemia.io"
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.97 }}
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-bold border border-white/15 text-white/80 hover:border-white/30 hover:text-white transition-all duration-200"
-            >
-              Escribir al correo
-            </motion.a>
-          </div>
+                <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: "#C32D4B" }}>A. Tu negocio hoy</p>
 
-          {/* Local trust signal */}
-          <div className="flex items-center justify-center gap-2">
-            <MapPin className="w-4 h-4" style={{ color: "#C32D4B" }} />
-            <p className="text-white/40 text-sm font-medium">
-              Somos de Mérida. Trabajamos en persona, no solo por videollamada.
-            </p>
-          </div>
-        </motion.div>
+                <div>
+                  <FieldLabel>¿A qué se dedica tu negocio?</FieldLabel>
+                  {[
+                    "Venta de productos (tienda, comercio, distribución)",
+                    "Servicios profesionales (consultoría, contabilidad, legal, etc.)",
+                    "Servicios de salud (consultorio, clínica, laboratorio)",
+                    "Alimentos y bebidas (restaurante, café, catering)",
+                    "Educación o capacitación",
+                  ].map(opt => <RadioOpt key={opt} label={opt} checked={data.giro === opt} onChange={() => set("giro", opt)} />)}
+                  <div className="flex items-center gap-3 py-1.5">
+                    <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 cursor-pointer transition-all"
+                      style={{ borderColor: data.giro === "otro" ? "#C32D4B" : "#d1d5db" }}
+                      onClick={() => set("giro", "otro")}>
+                      {data.giro === "otro" && <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#C32D4B" }} />}
+                    </div>
+                    <span className="text-sm flex-shrink-0" style={{ color: "#252525" }}>Otro:</span>
+                    <input type="text" value={data.giroOtro}
+                      onChange={e => { set("giroOtro", e.target.value); set("giro", "otro"); }}
+                      className="flex-1 px-3 py-1.5 rounded border text-sm outline-none"
+                      style={{ borderColor: "#e5e7eb", fontFamily: "inherit", color: "#252525" }}
+                      placeholder="Describe tu giro" />
+                  </div>
+                </div>
+
+                <div>
+                  <FieldLabel>¿Cuántas personas trabajan en tu negocio?</FieldLabel>
+                  {["1–3 personas", "4–10 personas", "11–25 personas", "Más de 25 personas"].map(opt =>
+                    <RadioOpt key={opt} label={opt} checked={data.equipo === opt} onChange={() => set("equipo", opt)} />)}
+                </div>
+
+                <div>
+                  <FieldLabel>¿Cuántos clientes atienden aproximadamente al mes?</FieldLabel>
+                  {["Menos de 50", "50–150", "150–500", "Más de 500"].map(opt =>
+                    <RadioOpt key={opt} label={opt} checked={data.clientes === opt} onChange={() => set("clientes", opt)} />)}
+                </div>
+              </FormWrapper>
+            </motion.div>
+          )}
+
+          {/* ── B: OPERACIÓN DIARIA ── */}
+          {step === "b" && (
+            <motion.div key="b" {...slideIn}>
+              <FormWrapper title="Cómo trabajan día a día" progress={1} onBack={() => setStep("a")} onNext={() => setStep("c")} canNext={canB}>
+                <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "#C32D4B" }}>B. Operación diaria</p>
+                <p className="text-sm mb-6" style={{ color: "#6b6b6b" }}>
+                  En cada actividad, marca qué tanto se hace de forma manual vs. con herramienta digital.
+                </p>
+                <div className="space-y-7">
+                  {([
+                    ["Atención a clientes (responder preguntas, dar información, agendar)", "rA"],
+                    ["Registro de ventas, pedidos o citas", "rB"],
+                    ["Comunicación interna (coordinación entre equipo)", "rC"],
+                    ["Seguimiento a clientes después de la venta o servicio", "rD"],
+                    ["Manejo de documentos, reportes o inventarios", "rE"],
+                  ] as [string, keyof QData][]).map(([label, key]) => (
+                    <div key={key as string}>
+                      <FieldLabel>{label}</FieldLabel>
+                      <Rating value={data[key] as number} onChange={v => set(key, v)} left="Todo manual" right="Todo digital" />
+                    </div>
+                  ))}
+                </div>
+              </FormWrapper>
+            </motion.div>
+          )}
+
+          {/* ── C: CAPACIDAD ── */}
+          {step === "c" && (
+            <motion.div key="c" {...slideIn}>
+              <FormWrapper title="Tu operación a fondo" progress={2} onBack={() => setStep("b")} onNext={() => setStep("calendar")} canNext={canC} nextLabel="Ver disponibilidad">
+                <p className="text-xs font-bold uppercase tracking-widest mb-5" style={{ color: "#C32D4B" }}>C. Capacidad y cuellos de botella</p>
+
+                <div>
+                  <FieldLabel>Si mañana te llegaran el triple de clientes, ¿qué tan preparado está tu negocio para atenderlos sin contratar a nadie más?</FieldLabel>
+                  <div className="mt-3">
+                    <Rating value={data.escalabilidad} onChange={v => set("escalabilidad", v)} left="Imposible" right="Sin problema" />
+                  </div>
+                </div>
+
+                <div>
+                  <FieldLabel>¿Qué áreas de tu negocio serían las primeras en tener problemas?</FieldLabel>
+                  <p className="text-xs mb-2" style={{ color: "#9b9b9b" }}>Puedes marcar más de una.</p>
+                  {[
+                    "Cotizaciones / precios",
+                    "Atención al cliente",
+                    "Producción / entrega del servicio",
+                    "Cobros y facturación",
+                    "Coordinación del equipo",
+                    "Seguimiento a clientes",
+                    "Inventario / insumos",
+                  ].map(opt => <CheckOpt key={opt} label={opt} checked={data.problemas.includes(opt)} onChange={() => toggleProblema(opt)} />)}
+                  <div className="flex items-center gap-3 py-1.5">
+                    <div className="w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 cursor-pointer transition-all"
+                      style={{ borderColor: data.problemas.includes("otro") ? "#C32D4B" : "#d1d5db", background: data.problemas.includes("otro") ? "#C32D4B" : "transparent" }}
+                      onClick={() => toggleProblema("otro")}>
+                      {data.problemas.includes("otro") && <Check className="w-3 h-3 text-white" />}
+                    </div>
+                    <span className="text-sm flex-shrink-0" style={{ color: "#252525" }}>Otro:</span>
+                    <input type="text" value={data.problemasOtro}
+                      onChange={e => { set("problemasOtro", e.target.value); if (!data.problemas.includes("otro")) toggleProblema("otro"); }}
+                      className="flex-1 px-3 py-1.5 rounded border text-sm outline-none"
+                      style={{ borderColor: "#e5e7eb", fontFamily: "inherit", color: "#252525" }}
+                      placeholder="Describe el área" />
+                  </div>
+                </div>
+              </FormWrapper>
+            </motion.div>
+          )}
+
+          {/* ── CALENDAR ── */}
+          {step === "calendar" && (
+            <motion.div key="calendar" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
+              <div className="max-w-3xl mx-auto">
+                <button onClick={() => setStep("c")} className="flex items-center gap-1.5 text-sm font-semibold mb-6 hover:opacity-70 transition-opacity"
+                  style={{ color: "rgba(255,255,255,0.5)" }}>
+                  <ChevronLeft className="w-4 h-4" /> Volver
+                </button>
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-4"
+                    style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)" }}>
+                    <Check className="w-3.5 h-3.5 text-green-400" />
+                    <span className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.7)" }}>Cuestionario completado</span>
+                  </div>
+                  <h3 className="font-bold text-white text-2xl mb-1">Elige fecha y hora para tu diagnóstico</h3>
+                  <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>30 minutos · Remoto (Google Meet) o presencial en Mérida</p>
+                </div>
+                <div className="rounded-2xl overflow-hidden" style={{ background: "#fff" }}>
+                  <CalendlyEmbed name={data.nombreResponde} />
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+        </AnimatePresence>
       </div>
     </section>
   );
