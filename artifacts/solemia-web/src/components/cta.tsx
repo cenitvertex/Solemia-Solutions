@@ -11,6 +11,8 @@ interface QData {
   nombreNegocio: string;
   nombreResponde: string;
   correo: string;
+  codigoPais: string;
+  telefono: string;
   puesto: string;
   giro: string;
   giroOtro: string;
@@ -27,7 +29,7 @@ interface QData {
 }
 
 const initial: QData = {
-  nombreNegocio: "", nombreResponde: "", correo: "", puesto: "",
+  nombreNegocio: "", nombreResponde: "", correo: "", codigoPais: "+52", telefono: "", puesto: "",
   giro: "", giroOtro: "", equipo: "", clientes: "",
   rA: 0, rB: 0, rC: 0, rD: 0, rE: 0,
   escalabilidad: 0, problemas: [], problemasOtro: "",
@@ -100,6 +102,53 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
   return <p className="text-sm font-semibold mb-2" style={{ color: "#252525" }}>{children}</p>;
 }
 
+const COUNTRY_CODES = [
+  { code: "+52", label: "🇲🇽 +52" },
+  { code: "+1",  label: "🇺🇸 +1" },
+  { code: "+34", label: "🇪🇸 +34" },
+  { code: "+57", label: "🇨🇴 +57" },
+  { code: "+54", label: "🇦🇷 +54" },
+  { code: "+56", label: "🇨🇱 +56" },
+  { code: "+51", label: "🇵🇪 +51" },
+  { code: "+55", label: "🇧🇷 +55" },
+  { code: "+58", label: "🇻🇪 +58" },
+  { code: "+502", label: "🇬🇹 +502" },
+  { code: "+507", label: "🇵🇦 +507" },
+  { code: "+593", label: "🇪🇨 +593" },
+];
+
+function PhoneInput({ codigo, telefono, onCodigo, onTelefono }: {
+  codigo: string; telefono: string;
+  onCodigo: (v: string) => void; onTelefono: (v: string) => void;
+}) {
+  return (
+    <div className="flex gap-2">
+      <select
+        value={codigo}
+        onChange={e => onCodigo(e.target.value)}
+        style={{ fontFamily: "inherit", borderColor: "#e5e7eb", color: "#252525", background: "#fff" }}
+        className="px-2 py-2.5 rounded-lg border text-sm outline-none transition-colors flex-shrink-0 cursor-pointer"
+        onFocus={e => (e.currentTarget.style.borderColor = "#C32D4B")}
+        onBlur={e => (e.currentTarget.style.borderColor = "#e5e7eb")}
+      >
+        {COUNTRY_CODES.map(c => (
+          <option key={c.code} value={c.code}>{c.label}</option>
+        ))}
+      </select>
+      <input
+        type="tel"
+        value={telefono}
+        onChange={e => onTelefono(e.target.value.replace(/\D/g, ""))}
+        placeholder="Ej. 9991234567"
+        style={{ fontFamily: "inherit", borderColor: "#e5e7eb", color: "#252525" }}
+        className="flex-1 px-4 py-2.5 rounded-lg border text-sm outline-none transition-colors"
+        onFocus={e => (e.currentTarget.style.borderColor = "#C32D4B")}
+        onBlur={e => (e.currentTarget.style.borderColor = "#e5e7eb")}
+      />
+    </div>
+  );
+}
+
 // ─── EmailJS send ─────────────────────────────────────────────────────────────
 
 function sendFormEmail(d: QData) {
@@ -110,6 +159,7 @@ function sendFormEmail(d: QData) {
       nombreNegocio:  d.nombreNegocio,
       nombreResponde: d.nombreResponde,
       correo:         d.correo,
+      telefono:       `${d.codigoPais} ${d.telefono}`,
       puesto:         d.puesto,
       giro:           d.giro === "otro" ? d.giroOtro : d.giro,
       equipo:         d.equipo,
@@ -173,10 +223,11 @@ function CalComEmbed({ data }: { data: QData }) {
       elementOrSelector: containerRef.current,
       calLink: "solemia-s7l5nq/diagnostico-solemia",
       config: {
-        name:   data.nombreResponde,
-        email:  data.correo,
-        layout: "month_view",
-        theme:  "light",
+        name:              data.nombreResponde,
+        email:             data.correo,
+        smsReminderNumber: `${data.codigoPais}${data.telefono}`,
+        layout:            "month_view",
+        theme:             "light",
       },
     });
     win.Cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
@@ -258,7 +309,7 @@ export function CTA() {
   const toggleProblema = (val: string) =>
     set("problemas", data.problemas.includes(val) ? data.problemas.filter(p => p !== val) : [...data.problemas, val]);
 
-  const canA = !!(data.giro && data.equipo && data.clientes && data.correo && data.correo.includes("@"));
+  const canA = !!(data.giro && data.equipo && data.clientes && data.correo && data.correo.includes("@") && data.telefono.length >= 7);
   const canB = !!(data.rA && data.rB && data.rC && data.rD && data.rE);
   const canC = !!(data.escalabilidad && data.problemas.length > 0);
 
@@ -347,6 +398,8 @@ export function CTA() {
                       onFocus={e => (e.currentTarget.style.borderColor = "#C32D4B")}
                       onBlur={e => (e.currentTarget.style.borderColor = "#e5e7eb")}
                     /></div>
+                  <div><FieldLabel>Teléfono</FieldLabel>
+                    <PhoneInput codigo={data.codigoPais} telefono={data.telefono} onCodigo={v => set("codigoPais", v)} onTelefono={v => set("telefono", v)} /></div>
                   <div><FieldLabel>Puesto / Rol</FieldLabel>
                     <TextInput value={data.puesto} onChange={v => set("puesto", v)} placeholder="Ej. Dueño, Director, Gerente" /></div>
                 </div>
